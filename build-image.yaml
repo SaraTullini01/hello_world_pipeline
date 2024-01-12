@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-image-task
+spec:
+  #params:
+  #  - name: git-url
+  #    description: URL of the Git repository
+  resources:
+    inputs:
+      - name: source
+        type: git
+    outputs:
+      - name: image
+        type: image
+  steps:
+    - name: clone-repo
+      image: alpine/git
+      script: |
+        git clone https://github.com/SaraTullini01/hello_world_pipeline.git /workspace/source
+    - name: build-docker-image
+      image: docker:19.03.13
+      script: |
+        cd /workspace/source
+        docker build -t saratullini01/hello_world:4 .
+        docker push saratullini01/hello_world:4
