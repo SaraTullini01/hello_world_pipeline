@@ -3,13 +3,6 @@ kind: Task
 metadata:
   name: build-image-task
 spec:
-  resources:
-    inputs:
-      - name: source
-        type: git
-    outputs:
-      - name: image
-        type: image
   steps:
     - name: clone-repo
       image: alpine/git

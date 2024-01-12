@@ -1,0 +1,45 @@
+# apiVersion: tekton.dev/v1beta1
+# kind: PipelineRun
+# metadata:
+#   name: pipeline-run
+# spec:
+#   pipelineRef:
+#     name: build-and-update-pipeline
+#   params:
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: news-demo-dev-deploy
+  namespace: news-demo-dev
+spec:
+  serviceAccountName: news-demo-dev
+  # params:
+  #   - name: REPO
+  #     value: "https://github.com/sm43/news-demo"
+  #   - name: REVISION
+  #     value: "tekton-and-agrocd"
+  #   - name: IMAGE
+  #     value: "quay.io/sm43/news-demo-dev"
+  #   - name: TAG
+  #     value: "v0.1"
+  #   - name: NAMESPACE
+  #     value: "news-demo-dev"
+  #   - name: CONFIG_REPO_URL
+  #     value: "https://github.com/sm43/tekton-argocd"
+  #   - name: CONFIG_REPO
+  #     value: "sm43/tekton-argocd"
+  #   - name: GIT_USERNAME
+  #     value: "sm43"
+  #   - name: GIT_PASSWORD
+  #     value: "<>"
+  pipelineRef:
+    name: news-demo-dev-deploy
+  workspaces:
+    - name: shared-workspace
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi

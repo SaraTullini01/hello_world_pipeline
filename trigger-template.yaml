@@ -1,0 +1,71 @@
+# apiVersion: tekton.dev/v1beta1
+# kind: TriggerTemplate
+# metadata:
+#   name: build-trigger-template
+# spec:
+#   params:
+#   - name: git-url
+#     description: URL of the Git repository
+#   resourcetemplates:
+#   - apiVersion: tekton.dev/v1beta1
+#     kind: PipelineRun
+#     metadata:
+#       generateName: build-
+#     spec:
+#       pipelineRef:
+#         name: build-and-update-pipeline
+#       resources:
+#         - name: source
+#           resourceSpec:
+#             type: git
+#             params:
+#               - name: url
+#                 value: $(params.git-url)
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: news-demo-dev-template
+  namespace: news-demo-dev
+spec:
+  params:
+    - name: gitrevision
+    - name: gitrepositoryurl
+    - name: createdat
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: news-demo-dev-deploy-
+        namespace: news-demo-dev
+      spec:
+        serviceAccountName: news-demo-dev
+        params:
+          - name: REPO
+            value: $(tt.params.gitrepositoryurl)
+          - name: REVISION
+            value: $(tt.params.gitrevision)
+          - name: IMAGE
+            value: "quay.io/sm43/news-demo-dev"
+          - name: TAG
+            value: $(tt.params.createdat)
+          - name: NAMESPACE
+            value: "news-demo-dev"
+          - name: CONFIG_REPO_URL
+            value: "https://github.com/sm43/tekton-argocd"
+          - name: CONFIG_REPO
+            value: "sm43/tekton-argocd"
+          - name: GIT_USERNAME
+            value: "sm43"
+          - name: GIT_PASSWORD
+            value: "<>"
+        pipelineRef:
+          name: news-demo-dev-deploy
+        workspaces:
+          - name: shared-workspace
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Gi
