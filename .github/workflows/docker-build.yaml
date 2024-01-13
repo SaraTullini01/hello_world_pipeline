@@ -19,4 +19,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: saratullini01/hello_world:latest
+          tags: saratullini01/hello_world:${{ github.sha }}
