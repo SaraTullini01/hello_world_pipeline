@@ -22,5 +22,5 @@ spec:
       initContainers:
       - name: update-deployment-tag
         image: curlimages/curl:latest
-        command: ["/bin/sh", "-c", "TAG=$(curl -s 'https://registry.hub.docker.com/v2/repositories/saratullini01/hello_world/tags' | jq -r '.results[0].name') && sed -i 's/:tag/:$TAG/' /path/to/deployment.yaml"]
+        command: ["/bin/sh", "-c", "TAG=$(curl -s 'https://registry.hub.docker.com/v2/repositories/saratullini01/hello_world/tags' | jq -r '.results[0].name') && sed -i 's/:tag/:$TAG/' deployment.yaml"]
       restartPolicy: OnFailure
