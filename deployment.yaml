@@ -36,6 +36,7 @@ spec:
         args:
         - |
           # Esegui qui il tuo script o i comandi shell per ottenere l'ultimo tag dell'immagine da Docker Hub
+          apk add --no-cache curl jq # Install jq package
           latestTag=$(curl -s https://registry.hub.docker.com/v2/repositories/saratullini01/hello_world/tags/ | jq -r '.results[].name' | sort -V | tail -n1)
           kubectl set image deployment/hello-world-deployment helloworld=saratullini01/hello_world:$latestTag
       restartPolicy: Never
