@@ -19,3 +19,8 @@ spec:
         image: saratullini01/hello_world:latest
         ports:
         - containerPort: 5000
+      initContainers:
+      - name: update-deployment-tag
+        image: curlimages/curl:latest
+        command: ["/bin/sh", "-c", "TAG=$(curl -s 'https://registry.hub.docker.com/v2/repositories/saratullini01/hello_world/tags' | jq -r '.results[0].name') && sed -i 's/:tag/:$TAG/' /path/to/deployment.yaml"]
+      restartPolicy: OnFailure
