@@ -19,5 +19,3 @@ spec:
         image: saratullini01/hello_world:latest
         ports:
         - containerPort: 5000
-        script: |
-        docker run -p 5000:5000 saratullini01/hello_world:latest
