@@ -16,11 +16,26 @@ spec:
     spec:
       containers:
       - name: helloworld
-        image: saratullini01/hello_world:tag
+        image: saratullini01/hello_world:{{ .Values.imageTag }}
         ports:
         - containerPort: 5000
-      initContainers:
-      - name: update-deployment-tag
-        image: curlimages/curl:latest
-        command: ["/bin/sh", "-c", "TAG=$(curl -s 'https://registry.hub.docker.com/v2/repositories/saratullini01/hello_world/tags' | jq -r '.results[0].name') && sed -i 's/:tag/:$TAG/' deployment.yaml"]
-      restartPolicy: OnFailure
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: update-image-tag
+spec:
+  template:
+    spec:
+      containers:
+      - name: update-image-tag
+        image: alpine:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          # Esegui qui il tuo script o i comandi shell per ottenere l'ultimo tag dell'immagine da Docker Hub
+          latestTag=$(curl -s https://registry.hub.docker.com/v2/repositories/saratullini01/hello_world/tags/ | jq -r '.results[].name' | sort -V | tail -n1)
+          kubectl set image deployment/hello-world-deployment helloworld=saratullini01/hello_world:$latestTag
+      restartPolicy: Never
