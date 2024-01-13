@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: helloworld
-        image: saratullini01/hello_world:latest
+        image: saratullini01/hello_world:tag
         ports:
         - containerPort: 5000
       initContainers:
