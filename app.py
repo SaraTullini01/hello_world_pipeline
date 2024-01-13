@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'porca vacca devi funzionare!'
+    return 'ok, ora forse funzioni'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
