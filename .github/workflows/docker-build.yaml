@@ -31,7 +31,7 @@ jobs:
 
     - name: Update Deployment
       env:
-        KUBE_CONFIG_DATA: |
+        KUBE_CONFIG_DATA: 
           apiVersion: v1
           clusters:
           - cluster:
